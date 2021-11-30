@@ -1,4 +1,4 @@
-name: Phrase Elixir Lawa
+name: Phrase Ruby Lawa
 
 on:
   workflow_call:
@@ -33,7 +33,7 @@ jobs:
         run: |
           test -f Gemfile || touch Gemfile
           grep -qxF "source 'https://rubygems.org'" Gemfile || echo -e "source 'https://rubygems.org'" >> Gemfile
-          grep -qxF 'lawa.git' Gemfile || echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile
+          grep -qxF 'lawa' Gemfile || echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile
           bundle install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
