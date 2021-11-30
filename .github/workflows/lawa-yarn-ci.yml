@@ -39,10 +39,11 @@ jobs:
             ${{ runner.os }}-yarn
       - name: Install yarn dependencies
         run: |
-          cd ${{ inputs.yarn-cwd }}
-          rm .npmrc
+          rm -rf ${{ inputs.yarn-cwd }}/.npmrc
           npm config set '//npm.pkg.github.com/:_authToken' "${GITHUB_TOKEN}"
           yarn --pure-lockfile --cwd=${{ inputs.yarn-cwd }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
       - name: Run lawa
         run: bundle exec lawa --enabled-package-managers yarn
         env:
