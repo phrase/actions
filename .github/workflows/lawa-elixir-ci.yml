@@ -47,12 +47,14 @@ jobs:
           bundler-cache: true
       - name: Install lawa
         run: |
-          echo "source 'https://rubygems.org'" >> Gemfile
-          echo "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile
-          bundle install
+          touch Gemfile.lawa
+          echo "source 'https://rubygems.org'" >> Gemfile.lawa
+          echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
+          bundle config unset deployment
+          BUNDLE_GEMFILE=Gemfile.lawa bundle install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: bundle exec lawa --enabled-package-managers=mix --decisions-file=${{ inputs.decisions-file }}
+        run: BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --enabled-package-managers=mix --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
