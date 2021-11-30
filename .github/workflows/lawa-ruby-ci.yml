@@ -24,11 +24,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Set up Ruby
         uses: ruby/setup-ruby@77ca66ce2792fb05b8b204a203328e12593a64f3
-        env:
-          ImageOS: ubuntu20
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.GH_ACCESS_TOKEN }}
       - name: Install lawa
         run: |
           test -f Gemfile || touch Gemfile
