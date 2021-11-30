@@ -1,0 +1,54 @@
+name: Phrase Elixir Lawa
+
+on:
+  workflow_call:
+    inputs:
+      otp-version:
+        required: false
+        type: string
+        default: 24.1.7
+      elixir-version:
+        required: false
+        type: string
+        default: 1.12.3
+      ruby-version:
+        required: false
+        type: string
+        default: 2.6
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  lawa:
+    name: lawa
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5_amd64.deb
+          sudo apt-get install ./libssl1.0.0_1.0.2n-1ubuntu5_amd64.deb
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: ${{ inputs.otp-version }}
+          elixir-version: ${{ inputs.elixir-version }}
+      - name: Checkout app
+        uses: actions/checkout@v2
+      - run: mix deps.get
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        env:
+          ImageOS: ubuntu20
+        with:
+          ruby-version: ${{ inputs.ruby-version }}
+          bundler-cache: true
+      - name: Install lawa
+        run: |
+          echo "source 'https://rubygems.org'" >> Gemfile
+          echo "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile
+          bundle install
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+      - name: Run lawa
+        run: bundle exec lawa --enabled-package-managers mix
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
