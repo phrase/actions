@@ -31,11 +31,13 @@ jobs:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.GH_ACCESS_TOKEN }}
       - name: Install lawa
         run: |
-          gem install specific_install
-          gem specific_install git@github.com:phrase/lawa.git
+          touch Gemfile.lawa
+          echo "source 'https://rubygems.org'" >> Gemfile.lawa
+          echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
+          BUNDLE_GEMFILE=Gemfile.lawa bundle install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
+        run: BUNDLE_GEMFILE=Gemfile_lawa bundle exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
