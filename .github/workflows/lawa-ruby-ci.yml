@@ -32,7 +32,7 @@ jobs:
       - name: Install lawa
         run: |
           gem install specific_install
-          gem specific_install https://github.com/phrase/lawa.git
+          gem specific_install git@github.com:phrase/lawa.git
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
