@@ -66,6 +66,6 @@ jobs:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
         run: |
-          BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --project=assets --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
+          BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
