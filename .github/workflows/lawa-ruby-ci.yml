@@ -38,6 +38,6 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: BUNDLE_GEMFILE=Gemfile_lawa bundle exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
+        run: BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
