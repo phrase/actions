@@ -1,0 +1,43 @@
+name: Phrase Elixir Lawa
+
+on:
+  workflow_call:
+    inputs:
+      ruby-version:
+        required: false
+        type: string
+        default: 2.7.3
+      decisions-file:
+        required: false
+        type: string
+        default: license-decisions.yml
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  lawa:
+    name: lawa
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@77ca66ce2792fb05b8b204a203328e12593a64f3
+        env:
+          ImageOS: ubuntu20
+        with:
+          ruby-version: ${{ inputs.ruby-version }}
+          bundler-cache: true
+      - name: Install lawa
+        run: |
+          test -f Gemfile || touch Gemfile
+          grep -qxF "source 'https://rubygems.org'" Gemfile || echo -e "source 'https://rubygems.org'" >> Gemfile
+          grep -qxF 'lawa.git' Gemfile || echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile
+          bundle install
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+      - name: Run lawa
+        run: bundle exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
