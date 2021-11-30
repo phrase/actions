@@ -42,7 +42,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn
       - name: Install yarn dependencies
-        run: yarn --pure-lockfile --cwd=${{ inputs.yarn-cwd }}
+        run: |
+          cd ${{ inputs.yarn-cwd }}
+          yarn install --pure-lockfile
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
@@ -61,6 +63,8 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: bundle exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
+        run: |
+          cd ${{ inputs.yarn-cwd }}
+          bundle exec lawa --enabled-package-managers=yarn --decisions-file=../${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
