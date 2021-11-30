@@ -1,0 +1,45 @@
+name: Phrase Yarn Lawa
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: 12.8
+      yarn-cwd:
+        required: false
+        type: string
+        default: '.'
+      decisions-file:
+        required: false
+        type: string
+        default: license-decisions.yml
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  lawa:
+    name: lawa
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v1
+      - name: Set up node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Cache app node modules
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ inputs.yarn-cwd }}/node_modules
+          restore-keys: |
+            ${{ runner.os }}-yarn
+      - name: Install yarn dependencies
+        run: yarn --pure-lockfile --cwd=${{ inputs.yarn-cwd }}
+      - name: Run lawa
+        run: bundle exec lawa --enabled-package-managers yarn
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
