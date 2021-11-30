@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: 12.8
+      ruby-version:
+        required: false
+        type: string
+        default: 2.7.3
       yarn-cwd:
         required: false
         type: string

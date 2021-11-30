@@ -14,7 +14,7 @@ on:
       ruby-version:
         required: false
         type: string
-        default: 2.6
+        default: 2.7.3
       decisions-file:
         required: false
         type: string
