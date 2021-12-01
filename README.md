@@ -15,12 +15,10 @@ name: CI
 on: [ push ]
 
 jobs:
-  lawa-js-ci:
-    uses: phrase/actions/.github/workflows/lawa-js-ci.yml@main
+  lawa-ruby-ci:
+    uses: phrase/actions/.github/workflows/lawa-ruby-ci.yml@main
     with:
-      node-version: 12.13.0
       decisions-file: license-decisions.yml
-      yarn-cwd: ./assets
     secrets:
       github-token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
