@@ -15,7 +15,7 @@ name: CI
 on: [ push ]
 
 jobs:
-  yarn-lawa-check:
+  lawa-js-ci:
     uses: phrase/actions/.github/workflows/lawa-js-ci.yml@main
     with:
       node-version: 12.13.0
