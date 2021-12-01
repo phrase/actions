@@ -69,3 +69,4 @@ jobs:
           BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
