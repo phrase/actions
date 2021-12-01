@@ -1,4 +1,4 @@
-name: Phrase Yarn Lawa
+name: Phrase JS License Check
 
 on:
   workflow_call:
@@ -6,7 +6,7 @@ on:
       node-version:
         required: false
         type: string
-        default: 12.8
+        default: 12.13.0
       ruby-version:
         required: false
         type: string

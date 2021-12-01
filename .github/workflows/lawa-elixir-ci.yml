@@ -1,4 +1,4 @@
-name: Phrase Elixir Lawa
+name: Phrase Elixir License Check
 
 on:
   workflow_call:
