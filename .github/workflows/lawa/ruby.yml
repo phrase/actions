@@ -1,4 +1,4 @@
-name: Phrase Ruby Lawa
+name: Phrase Ruby License Check
 
 on:
   workflow_call:
