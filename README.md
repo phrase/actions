@@ -6,9 +6,11 @@ Collection of common GitHub Actions for Phrase.
 
 License checks for Elixir, Ruby, JS.
 
-### Example
+### Setup
 
 Create `.github/workflows/lawa-(js|ruby|elixir)-ci.yml` in your repo.
+
+Example:
 
 ```yml
 name: CI
@@ -22,6 +24,19 @@ jobs:
     secrets:
       github-token: ${{ secrets.GH_ACCESS_TOKEN }}
 ```
+
+Create `license-decisions.yml` in your repo.
+
+Example:
+
+```yml
+---
+- - :inherit_from
+  - url: https://raw.githubusercontent.com/phrase/lawa/master/config/license-decisions.yml
+    authorization: token $GITHUB_TOKEN
+
+```
+
 ---
 
 ### Secrets (common for every stack)
