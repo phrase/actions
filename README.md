@@ -8,7 +8,7 @@ License checks for Elixir, Ruby, JS.
 
 ### Example
 
-Create `.github/workflows/lawa-elixir-ci.yml` in your repo.
+Create `.github/workflows/lawa-(js|ruby|elixir)-ci.yml` in your repo.
 
 ```yml
 name: CI
@@ -16,7 +16,7 @@ on: [ push ]
 
 jobs:
   yarn-lawa-check:
-    uses: phrase/actions/.github/workflows/lawa/yarn.yml@main
+    uses: phrase/actions/.github/workflows/lawa-js-ci.yml@main
     with:
       node-version: 12.13.0
       decisions-file: license-decisions.yml

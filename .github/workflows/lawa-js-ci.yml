@@ -1,4 +1,4 @@
-name: Phrase Yarn License Check
+name: Phrase JS License Check
 
 on:
   workflow_call:
