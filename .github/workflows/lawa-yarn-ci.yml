@@ -1,20 +1,20 @@
-name: Phrase Elixir Lawa
+name: Phrase Yarn Lawa
 
 on:
   workflow_call:
     inputs:
-      otp-version:
+      node-version:
         required: false
         type: string
-        default: 24.1.7
-      elixir-version:
-        required: false
-        type: string
-        default: 1.12.3
+        default: 12.8
       ruby-version:
         required: false
         type: string
         default: 2.7.3
+      yarn-cwd:
+        required: false
+        type: string
+        default: '.'
       decisions-file:
         required: false
         type: string
@@ -28,16 +28,26 @@ jobs:
     name: lawa
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5_amd64.deb
-          sudo apt-get install ./libssl1.0.0_1.0.2n-1ubuntu5_amd64.deb
-      - uses: actions/setup-elixir@v1
-        with:
-          otp-version: ${{ inputs.otp-version }}
-          elixir-version: ${{ inputs.elixir-version }}
       - name: Checkout app
-        uses: actions/checkout@v2
-      - run: mix deps.get
+        uses: actions/checkout@v1
+      - name: Set up node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Cache app node modules
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ inputs.yarn-cwd }}/node_modules
+          restore-keys: |
+            ${{ runner.os }}-yarn
+      - name: Install yarn dependencies
+        run: |
+          cd ${{ inputs.yarn-cwd }}
+          yarn install --pure-lockfile
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         env:
@@ -55,6 +65,8 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --enabled-package-managers=mix --decisions-file=${{ inputs.decisions-file }}
+        run: |
+          BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}

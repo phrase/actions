@@ -28,7 +28,7 @@ jobs:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
         env:
-          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.GH_ACCESS_TOKEN }}
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install lawa
         run: |
           touch Gemfile.lawa
