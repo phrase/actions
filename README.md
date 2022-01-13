@@ -53,15 +53,19 @@ Example:
 
 ##### `otp-version`
 
-**Optional** OTP version, defaults to `24.1.7`.
+**Optional** OTP version, defaults to `24.2`.
 
 ##### `elixir-version`
 
-**Optional** Elixir version, defaults to `1.12.3`.
+**Optional** Elixir version, defaults to `1.13.1`.
 
 ##### `ruby-version`
 
-**Optional** Ruby version for installing `lawa` gem, defaults to `2.7.3`.
+**Optional** Ruby version for installing `lawa` gem, defaults to `3.0.3`.
+
+##### `ruby-bundler-version`
+
+**Optional** Ruby bundler version for installing `lawa` gem, defaults to `2.1.4`.
 
 ##### `decisions-file`
 

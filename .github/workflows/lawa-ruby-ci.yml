@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: 3.0.3
+      ruby-bundler-version:
+        required: false
+        type: string
+        default: 2.1.4
       decisions-file:
         required: false
         type: string
@@ -30,17 +34,17 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install compatible bundler version
-        run: gem install bundler:2.1.4
+        run: gem install bundler:${{ inputs.ruby-bundler-version }}
       - name: Install lawa
         run: |
           touch Gemfile.lawa
           echo "source 'https://rubygems.org'" >> Gemfile.lawa
           echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
-          bundle _2.1.4_ config unset deployment
-          BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ install
+          bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
+        run: BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
