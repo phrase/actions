@@ -6,7 +6,7 @@ on:
       ruby-version:
         required: false
         type: string
-        default: 2.7.3
+        default: 3.0.3
       decisions-file:
         required: false
         type: string
@@ -23,22 +23,24 @@ jobs:
       - name: Checkout app
         uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: ruby/setup-ruby@77ca66ce2792fb05b8b204a203328e12593a64f3
+        uses: ruby/setup-ruby@168d6a54b412713c0ed60998a78093a270ca8d84
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+      - name: Install compatible bundler version
+        run: gem install bundler:2.1.4
       - name: Install lawa
         run: |
           touch Gemfile.lawa
           echo "source 'https://rubygems.org'" >> Gemfile.lawa
           echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
-          bundle config unset deployment
-          BUNDLE_GEMFILE=Gemfile.lawa bundle install
+          bundle _2.1.4_ config unset deployment
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
+        run: BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ exec lawa --enabled-package-managers=bundler --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
