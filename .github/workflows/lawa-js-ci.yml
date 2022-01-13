@@ -10,7 +10,7 @@ on:
       ruby-version:
         required: false
         type: string
-        default: 2.7.3
+        default: 3.0.3
       yarn-cwd:
         required: false
         type: string
@@ -49,24 +49,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@168d6a54b412713c0ed60998a78093a270ca8d84
         env:
           ImageOS: ubuntu20
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
+      - name: Install compatible bundler version
+        run: gem install bundler:2.1.4
       - name: Install lawa
         run: |
           touch Gemfile.lawa
           echo "source 'https://rubygems.org'" >> Gemfile.lawa
           echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
-          bundle config unset deployment
-          BUNDLE_GEMFILE=Gemfile.lawa bundle install
+          bundle _2.1.4_ config unset deployment
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
         run: |
-          BUNDLE_GEMFILE=Gemfile.lawa bundle exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _2.1.4_ exec lawa --project-path=${{ inputs.yarn-cwd }} --enabled-package-managers=yarn --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
