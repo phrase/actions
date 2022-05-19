@@ -6,11 +6,11 @@ on:
       ruby-version:
         required: false
         type: string
-        default: 3.0.3
+        default: 3.1.2
       ruby-bundler-version:
         required: false
         type: string
-        default: 2.1.4
+        default: 2.3.14
       decisions-file:
         required: false
         type: string
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout app
         uses: actions/checkout@v2
       - name: Set up Ruby
-        uses: ruby/setup-ruby@168d6a54b412713c0ed60998a78093a270ca8d84
+        uses: ruby/setup-ruby@8029ebd6e5bd8f4e0d6f7623ea76a01ec5b1010d
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
