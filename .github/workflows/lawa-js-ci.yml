@@ -55,12 +55,12 @@ jobs:
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
       - name: Set up Ruby
-        uses: ruby/setup-ruby@168d6a54b412713c0ed60998a78093a270ca8d84
-        env:
-          ImageOS: ubuntu20
+        uses: ruby/setup-ruby@8029ebd6e5bd8f4e0d6f7623ea76a01ec5b1010d
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install compatible bundler version
         run: gem install bundler:${{ inputs.ruby-bundler-version }}
       - name: Install lawa
