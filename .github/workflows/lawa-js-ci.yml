@@ -46,6 +46,10 @@ jobs:
           path: ${{ inputs.yarn-cwd }}/node_modules
           restore-keys: |
             ${{ runner.os }}-yarn
+      - name: Set auth token
+        run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: Install yarn dependencies
         run: |
           cd ${{ inputs.yarn-cwd }}
