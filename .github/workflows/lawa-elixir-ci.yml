@@ -6,19 +6,19 @@ on:
       otp-version:
         required: false
         type: string
-        default: 24.2
+        default: 25.2
       elixir-version:
         required: false
         type: string
-        default: 1.13.1
+        default: 1.14.2
       ruby-version:
         required: false
         type: string
-        default: 3.0.3
+        default: 3.1.2
       ruby-bundler-version:
         required: false
         type: string
-        default: 2.1.4
+        default: 2.3.14
       decisions-file:
         required: false
         type: string
