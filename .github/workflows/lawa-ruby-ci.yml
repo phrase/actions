@@ -18,6 +18,8 @@ on:
     secrets:
       github-token:
         required: true
+      sidekiq-enterprise-config:
+        required: false
 
 jobs:
   lawa:
@@ -26,6 +28,14 @@ jobs:
     steps:
       - name: Checkout app
         uses: actions/checkout@v3
+      - name: Set bundle config
+        run: |
+          if [ -n "${{ secrets.sidekiq-enterprise-config }}" ]; then
+            echo "Setting Sidekiq Enterprise config"
+            export BUNDLE_ENTERPRISE__CONTRIBSYS__COM=${{ secrets.sidekiq-enterprise-config }}
+          else
+            echo "Sidekiq Enterprise config not supplied"
+          fi
       - name: Set up Ruby
         uses: ruby/setup-ruby@9669f3ee51dc3f4eda8447ab696b3ab19a90d14b # pin@v1.144.0
         with:
