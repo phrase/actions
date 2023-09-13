@@ -33,6 +33,8 @@ jobs:
   lawa:
     name: lawa
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ENTERPRISE__CONTRIBSYS__COM: ${{ secrets.sidekiq-enterprise-config }}
     steps:
       - name: Checkout app
         uses: actions/checkout@v1
@@ -60,14 +62,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
-      - name: Set bundle config
-        run: |
-          if [ -n "${{ secrets.sidekiq-enterprise-config }}" ]; then
-            echo "Setting Sidekiq Enterprise config"
-            export BUNDLE_ENTERPRISE__CONTRIBSYS__COM=${{ secrets.sidekiq-enterprise-config }}
-          else
-            echo "Sidekiq Enterprise config not supplied"
-          fi
       - name: Set up Ruby
         uses: ruby/setup-ruby@c7079efafd956afb5d823e8999c2506e1053aefa
         with:
