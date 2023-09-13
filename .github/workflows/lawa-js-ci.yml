@@ -26,11 +26,15 @@ on:
     secrets:
       github-token:
         required: true
+      sidekiq-enterprise-key:
+        required: false
 
 jobs:
   lawa:
     name: lawa
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_ENTERPRISE__CONTRIBSYS__COM: ${{ secrets.sidekiq-enterprise-key }}
     steps:
       - name: Checkout app
         uses: actions/checkout@v1
@@ -63,7 +67,6 @@ jobs:
         with:
           ruby-version: ${{ inputs.ruby-version }}
           bundler-cache: true
-          cache-version: 1
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install compatible bundler version
