@@ -18,15 +18,11 @@ on:
     secrets:
       github-token:
         required: true
-      sidekiq-enterprise-config:
-        required: false
 
 jobs:
   lawa:
     name: lawa
     runs-on: ubuntu-latest
-    env:
-      BUNDLE_ENTERPRISE__CONTRIBSYS__COM: ${{ secrets.sidekiq-enterprise-config }}
     steps:
       - name: Checkout app
         uses: actions/checkout@v3
