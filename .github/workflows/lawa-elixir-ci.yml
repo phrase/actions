@@ -50,7 +50,6 @@ jobs:
           ImageOS: ubuntu20
         with:
           ruby-version: ${{ inputs.ruby-version }}
-          bundler-cache: true
       - name: Install compatible bundler version
         run: gem install bundler:${{ inputs.ruby-bundler-version }}
       - name: Install lawa

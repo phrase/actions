@@ -25,8 +25,6 @@ jobs:
   lawa:
     name: lawa
     runs-on: ubuntu-latest
-    env:
-      BUNDLE_ENTERPRISE__CONTRIBSYS__COM: ${{ secrets.sidekiq-enterprise-key }}
     steps:
       - name: Checkout app
         uses: actions/checkout@v3
@@ -34,7 +32,6 @@ jobs:
         uses: ruby/setup-ruby@9669f3ee51dc3f4eda8447ab696b3ab19a90d14b # pin@v1.144.0
         with:
           ruby-version: ${{ inputs.ruby-version }}
-          bundler-cache: true
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install compatible bundler version
