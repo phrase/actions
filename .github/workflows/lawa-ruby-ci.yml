@@ -18,8 +18,6 @@ on:
     secrets:
       github-token:
         required: true
-      sidekiq-enterprise-key:
-        required: false
 
 jobs:
   lawa:
