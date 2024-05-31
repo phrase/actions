@@ -42,7 +42,7 @@ jobs:
           otp-version: ${{ inputs.otp-version }}
           elixir-version: ${{ inputs.elixir-version }}
       - name: Checkout app
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - run: mix deps.get
       - name: Set up Ruby
         uses: ruby/setup-ruby@c7079efafd956afb5d823e8999c2506e1053aefa
