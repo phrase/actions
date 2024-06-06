@@ -1,0 +1,84 @@
+name: Phrase NPM License Check
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: 18
+      ruby-version:
+        required: false
+        type: string
+        default: 3.1.3
+      ruby-bundler-version:
+        required: false
+        type: string
+        default: 2.1.4
+      npm-cwd:
+        required: false
+        type: string
+        default: '.'
+      decisions-file:
+        required: false
+        type: string
+        default: config/license-decisions.yml
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  lawa:
+    name: lawa
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@v3
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Cache app node modules
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ inputs.npm-cwd }}/node_modules
+          restore-keys: |
+            ${{ runner.os }}-npm
+      - name: Set auth token
+        run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+      - name: Install NPM dependencies
+        run: |
+          cd ${{ inputs.npm-cwd }}
+          npm install
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
+          NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@c7079efafd956afb5d823e8999c2506e1053aefa
+        with:
+          ruby-version: ${{ inputs.ruby-version }}
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+      - name: Install compatible bundler version
+        run: gem install bundler:${{ inputs.ruby-bundler-version }}
+      - name: Install lawa
+        run: |
+          touch Gemfile.lawa
+          echo "source 'https://rubygems.org'" >> Gemfile.lawa
+          echo -e "gem 'lawa', github: 'phrase/lawa'" >> Gemfile.lawa
+          bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+      - name: Run lawa
+        run: |
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --project-path=${{ inputs.npm-cwd }} --enabled-package-managers=npm --decisions-file=${{ inputs.decisions-file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
+          NODE_AUTH_TOKEN: ${{ secrets.github-token }}
