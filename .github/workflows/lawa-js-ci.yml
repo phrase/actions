@@ -46,6 +46,11 @@ jobs:
           path: ${{ inputs.yarn-cwd }}/node_modules
           restore-keys: |
             ${{ runner.os }}-yarn
+      - name: Configure git to use token
+        run: |
+          git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
       - name: Set auth token
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
         env:
