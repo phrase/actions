@@ -28,12 +28,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout app
-      uses: actions/checkout@v4
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{ inputs.go-version }}
+    # - name: Checkout app
+    #   uses: actions/checkout@v4
+    # - name: Set up Go
+    #   uses: actions/setup-go@v2
+    #   with:
+    #     go-version: ${{ inputs.go-version }}
     - name: Set up Ruby
       uses: ruby/setup-ruby@0cde4689ba33c09f1b890c1725572ad96751a3fc # pin@v1.178.0
       with:
