@@ -54,6 +54,8 @@ jobs:
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run lawa
-        run: BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers=gomodules --decisions-file=${{ inputs.decisions-file }}
+        run: |
+          cd ${{ inputs.working-directory }}
+          BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers=gomodules --decisions-file=${{ inputs.decisions-file }}
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
