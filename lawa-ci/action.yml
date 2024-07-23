@@ -1,10 +1,6 @@
-name: Phrase Golang License Check
-description: Check the licenses of your Go dependencies with lawa
+name: Phrase License Check
+description: Check the licenses of your dependencies with lawa
 inputs:
-  go-version:
-    description: 'The Go version to use'
-    required: false
-    default: '1.19'
   ruby-version:
     description: 'The Ruby version to use'
     required: false
@@ -23,6 +19,9 @@ inputs:
     default: .license-decisions.yml
   github-token:
     description: 'The GitHub token to read phrase/lawa repository'
+    required: true
+  package-managers:
+    description: 'The package managers to check licenses for'
     required: true
 
 runs:
@@ -50,6 +49,6 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers=gomodules --decisions-file=${{ inputs.decisions-file }}
+        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers ${{ inputs.package-managers }} --decisions-file=${{ inputs.decisions-file }}
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
