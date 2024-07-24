@@ -44,9 +44,8 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        bundle config set frozen false
-        bundle add -g development license_finder
-        bundle exec license_finder --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
+        gem install license_finder
+        license_finder --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
