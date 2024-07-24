@@ -44,7 +44,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        bundle config set frozen false
+        bundle config unset deployment
         bundle add -g development license_finder
         bundle exec license_finder --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
