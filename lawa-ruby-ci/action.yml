@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |
         bundle config unset deployment
-        bundle add -g development lawa --github "phrase/lawa" --ref "448703903345a2b758c52c3c4fcd73c1e5055075"
+        bundle add -g development lawa --github "phrase/lawa" --ref "3fae651668059c520c24b79fbca852da46c98b27"
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Run lawa
