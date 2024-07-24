@@ -44,6 +44,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
+        bundle config set frozen false
         bundle add -g development lawa --github "phrase/lawa" --ref "3fae651668059c520c24b79fbca852da46c98b27"
         bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
