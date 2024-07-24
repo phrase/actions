@@ -34,17 +34,17 @@ runs:
     # - name: Install compatible bundler version
     #   shell: bash
     #   run: gem install bundler:${{ inputs.ruby-bundler-version }}
-    - name: Install lawa
-      shell: bash
-      run: |
-        bundle config unset deployment
-        bundle add -g development lawa --github "phrase/lawa" --ref "3fae651668059c520c24b79fbca852da46c98b27"
-      env:
-        BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
+    # - name: Install lawa
+    #   shell: bash
+    #   run: |
+    #     bundle config unset deployment
+    #   env:
+    #     BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Run lawa
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
+        bundle add -g development lawa --github "phrase/lawa" --ref "3fae651668059c520c24b79fbca852da46c98b27"
         bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
