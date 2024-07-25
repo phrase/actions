@@ -20,9 +20,9 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
+        bundle add -g development lawa --github "phrase/lawa"
         bundle lock --add-platform x86_64-linux
-        gem install lawa --github 'phrase/lawa'
-        lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
+        bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
