@@ -44,6 +44,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
+        bundle lock --add-platform x86_64-linux
         gem install license_finder
         license_finder --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
