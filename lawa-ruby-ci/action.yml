@@ -20,6 +20,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
+        bundle config set frozen false
         bundle add -g development lawa --github "phrase/lawa"
         bundle lock --add-platform x86_64-linux
         bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
