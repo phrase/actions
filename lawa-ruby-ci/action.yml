@@ -1,0 +1,29 @@
+name: Phrase Ruby License Check
+description: Check the licenses of your Ruby with lawa
+inputs:
+  working-directory:
+    description: 'The working directory to run lawa in'
+    required: false
+    default: .
+  decisions-file:
+    description: 'The path to the license decisions file'
+    required: false
+    default: .license-decisions.yml
+  github-token:
+    description: 'The GitHub token to read phrase/lawa repository'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run lawa
+      shell: bash
+      run: |
+        cd ${{ inputs.working-directory }}
+        bundle config set frozen false
+        bundle add -g development lawa --github "phrase/lawa"
+        bundle lock --add-platform x86_64-linux
+        bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
+      env:
+        BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
