@@ -64,7 +64,7 @@ jobs:
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
       - name: Set up Ruby
-        uses: ruby/setup-ruby@c7079efafd956afb5d823e8999c2506e1053aefa
+        uses: ruby/setup-ruby@0cde4689ba33c09f1b890c1725572ad96751a3fc
         with:
           ruby-version: ${{ inputs.ruby-version }}
         env:
