@@ -37,6 +37,7 @@ jobs:
       - name: Install license_finder
         run: |
           gem install license_finder
+          bundle install
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Run license_finder
