@@ -20,9 +20,10 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        bundle config set frozen false
+        bundle config unset frozen
         bundle add -g development lawa --github "phrase/lawa"
         bundle lock --add-platform x86_64-linux
+        bundle install
         bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
