@@ -38,7 +38,7 @@ jobs:
         run: |
           touch Gemfile.lawa
           echo "source 'https://rubygems.org'" >> Gemfile.lawa
-          echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
+          echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git', :branch => 'hardcode-gemfile'" >> Gemfile.lawa
           bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
           BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
         env:
