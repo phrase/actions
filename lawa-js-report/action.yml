@@ -44,15 +44,18 @@ runs:
         restore-keys: |
           ${{ runner.os }}-yarn
     - name: Configure git to use token
+      shell: bash
       run: |
         git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Set auth token
+      shell: bash
       run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
       env:
         NODE_AUTH_TOKEN: ${{ inputs.github-token }}
     - name: Install yarn dependencies
+      shell: bash
       run: |
         cd ${{ inputs.yarn-cwd }}
         yarn install --pure-lockfile
@@ -67,8 +70,10 @@ runs:
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Install compatible bundler version
+      shell: bash
       run: gem install bundler:${{ inputs.ruby-bundler-version }}
     - name: Install lawa
+      shell: bash
       run: |
         touch Gemfile.lawa
         echo "source 'https://rubygems.org'" >> Gemfile.lawa
@@ -78,6 +83,7 @@ runs:
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Run lawa
+      shell: bash
       run: |
         BUNDLE_GEMFILE=Gemfile.lawa \
         bundle _${{ inputs.ruby-bundler-version }}_ exec lawa report \
