@@ -1,0 +1,73 @@
+name: Phrase JS License Report
+description: Generates a report of the licenses used within your dependencies with lawa
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout app
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+    - name: Set up node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: 'https://npm.pkg.github.com'
+    - name: Cache app node modules
+      uses: actions/cache@v4
+      with:
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        path: ${{ inputs.yarn-cwd }}/node_modules
+        restore-keys: |
+          ${{ runner.os }}-yarn
+    - name: Configure git to use token
+      run: |
+        git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
+      env:
+        GITHUB_TOKEN: ${{ secrets.github-token }}
+    - name: Set auth token
+      run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+    - name: Install yarn dependencies
+      run: |
+        cd ${{ inputs.yarn-cwd }}
+        yarn install --pure-lockfile
+      env:
+        GITHUB_TOKEN: ${{ secrets.github-token }}
+        GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
+        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+      env:
+        BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+    - name: Install compatible bundler version
+      run: gem install bundler:${{ inputs.ruby-bundler-version }}
+    - name: Install lawa
+      run: |
+        touch Gemfile.lawa
+        echo "source 'https://rubygems.org'" >> Gemfile.lawa
+        echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
+        bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
+        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
+      env:
+        BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+    - name: Run lawa
+      run: |
+        BUNDLE_GEMFILE=Gemfile.lawa \
+        bundle _${{ inputs.ruby-bundler-version }}_ exec lawa report \
+          --format csv \
+          --columns ${{ inputs.columns }} \
+          --decisions-file=${{ inputs.decisions-file }} \
+          --save report.csv
+      env:
+        GITHUB_TOKEN: ${{ secrets.github-token }}
+        GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
+        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+    - name: Store report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lawa-report.csv
+        path: report.csv
