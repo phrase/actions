@@ -22,7 +22,7 @@ inputs:
     required: true
   package-managers:
     description: 'The package managers to check licenses for'
-    required: true
+    required: false
   columns:
     description: 'The columns to include in the report'
     required: false
@@ -53,8 +53,16 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa report --format csv --columns ${{ inputs.columns }} --enabled-package-managers ${{ inputs.package-managers }} --decisions-file=${{ inputs.decisions-file }} --save report.csv
+        BUNDLE_GEMFILE=Gemfile.lawa \
+        bundle _${{ inputs.ruby-bundler-version }}_ exec lawa report \
+          --format csv \
+          --columns ${{ inputs.columns }} \
+          $PM_FLAG \
+          --decisions-file=${{ inputs.decisions-file }} \
+          --save report.csv
       env:
+        # builds "--enabled-package-managers <value>" or ""
+        PM_FLAG: ${{ inputs.package-managers && format('--enabled-package-managers {0}', inputs.package-managers) }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Store report as artifact
       uses: actions/upload-artifact@v4
