@@ -1,6 +1,29 @@
 name: Phrase JS License Report
 description: Generates a report of the licenses used within your dependencies with lawa
-
+inputs:
+  node-version:
+    description: 'The node version to use'
+    required: false
+    default: 12.13.0
+  ruby-version:
+    description: 'The Ruby version to use'
+    required: false
+    default: 3.0.3
+  ruby-bundler-version:
+    description: 'The Ruby bundler version to use'
+    required: false
+    default: 2.1.4
+  yarn-cwd:
+    description: 'The directory to run yarn in'
+    required: false
+    default: '.'
+  decisions-file:
+    description: 'The path to the license decisions file'
+    required: false
+    default: license-decisions.yml
+  github-token:
+    description: 'The GitHub token to execute the action with'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -24,25 +47,25 @@ runs:
       run: |
         git config --global url."https://${GITHUB_TOKEN}:@github.com/".insteadOf "https://github.com/"
       env:
-        GITHUB_TOKEN: ${{ secrets.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Set auth token
       run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+        NODE_AUTH_TOKEN: ${{ inputs.github-token }}
     - name: Install yarn dependencies
       run: |
         cd ${{ inputs.yarn-cwd }}
         yarn install --pure-lockfile
       env:
-        GITHUB_TOKEN: ${{ secrets.github-token }}
-        GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
-        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_ACCESS_TOKEN: ${{ inputs.github-token }}
+        NODE_AUTH_TOKEN: ${{ inputs.github-token }}
     - name: Set up Ruby
       uses: ruby/setup-ruby@4a9ddd6f338a97768b8006bf671dfbad383215f4
       with:
         ruby-version: ${{ inputs.ruby-version }}
       env:
-        BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+        BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Install compatible bundler version
       run: gem install bundler:${{ inputs.ruby-bundler-version }}
     - name: Install lawa
@@ -53,7 +76,7 @@ runs:
         bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
         BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
       env:
-        BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
+        BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
     - name: Run lawa
       run: |
         BUNDLE_GEMFILE=Gemfile.lawa \
@@ -63,9 +86,9 @@ runs:
           --decisions-file=${{ inputs.decisions-file }} \
           --save report.csv
       env:
-        GITHUB_TOKEN: ${{ secrets.github-token }}
-        GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
-        NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_ACCESS_TOKEN: ${{ inputs.github-token }}
+        NODE_AUTH_TOKEN: ${{ inputs.github-token }}
     - name: Store report as artifact
       uses: actions/upload-artifact@v4
       with:
