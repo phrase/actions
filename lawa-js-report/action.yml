@@ -24,6 +24,10 @@ inputs:
   github-token:
     description: 'The GitHub token to execute the action with'
     required: true
+  columns:
+    description: 'The columns to include in the report'
+    required: false
+    default: 'project_name name use_case version licenses package_manager'
 runs:
   using: "composite"
   steps:
