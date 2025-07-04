@@ -34,6 +34,10 @@ jobs:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install compatible bundler version
         run: gem install bundler:${{ inputs.ruby-bundler-version }}
+      - name: Install dependencies
+        run: bundle _${{ inputs.ruby-bundler-version }}_ install --jobs 4 --retry 3 --path vendor/bundle
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
       - name: Install lawa
         run: |
           touch Gemfile.lawa
