@@ -57,6 +57,8 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+      - name: Install license detection plugin
+        run: yarn plugin import https://raw.githubusercontent.com/mhassan1/yarn-plugin-licenses/v0.7.2/bundles/@yarnpkg/plugin-licenses.js
       - name: Install yarn dependencies
         run: |
           cd ${{ inputs.yarn-cwd }}
