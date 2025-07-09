@@ -22,7 +22,7 @@ inputs:
     required: true
   package-managers:
     description: 'The package managers to check licenses for'
-    required: true
+    required: false
 
 runs:
   using: "composite"
@@ -49,6 +49,8 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers ${{ inputs.package-managers }} --decisions-file=${{ inputs.decisions-file }}
+        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa $PM_FLAG --decisions-file=${{ inputs.decisions-file }}
       env:
+        # builds "--enabled-package-managers <value>" or ""
+        PM_FLAG: ${{ inputs.package-managers && format('--enabled-package-managers {0}', inputs.package-managers) }}
         GITHUB_TOKEN: ${{ inputs.github-token }}

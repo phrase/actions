@@ -9,6 +9,10 @@ inputs:
     description: 'The path to the license decisions file'
     required: false
     default: .license-decisions.yml
+  package-managers:
+    description: 'The package managers to check licenses for'
+    required: false
+    default: bundler
   github-token:
     description: 'The GitHub token to read phrase/lawa repository'
     required: true
@@ -23,7 +27,9 @@ runs:
         bundle config unset deployment
         bundle add -g development lawa --github "phrase/lawa"
         bundle lock --add-platform x86_64-linux
-        bundle exec lawa --enabled-package-managers bundler --decisions-file=${{ inputs.decisions-file }}
+        bundle exec lawa $PM_FLAG --decisions-file=${{ inputs.decisions-file }}
       env:
+        # builds "--enabled-package-managers <value>" or ""
+        PM_FLAG: ${{ inputs.package-managers && format('--enabled-package-managers {0}', inputs.package-managers) }}
         BUNDLE_GITHUB__COM: x-access-token:${{ inputs.github-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
