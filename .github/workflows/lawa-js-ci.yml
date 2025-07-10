@@ -57,6 +57,12 @@ jobs:
         run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+      - name: Configure Phrase GitHub packages registry url & auth token
+        run: |
+          yarn config set --home "npmScopes[phrase].npmRegistryServer" "https://npm.pkg.github.com"
+          yarn config set --home "npmScopes[phrase].npmAuthToken" "\${NODE_AUTH_TOKEN}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.github-token }}
       - name: Install yarn dependencies
         run: |
           cd ${{ inputs.yarn-cwd }}
