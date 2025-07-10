@@ -95,3 +95,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.github-token }}
           NODE_AUTH_TOKEN: ${{ secrets.github-token }}
+          NPM_CONFIG_USERCONFIG: .npmrc
