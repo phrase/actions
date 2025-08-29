@@ -49,6 +49,6 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.working-directory }}
-        BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers ${{ inputs.package-managers }} --decisions-file=${{ inputs.decisions-file }}
+        BUNDLE_GEMFILE=Gemfile.lawa LAWA_GEMFILE=Gemfile bundle _${{ inputs.ruby-bundler-version }}_ exec lawa --enabled-package-managers ${{ inputs.package-managers }} --decisions-file=${{ inputs.decisions-file }}
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
