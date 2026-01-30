@@ -41,6 +41,7 @@ runs:
         touch Gemfile.lawa
         echo "source 'https://rubygems.org'" >> Gemfile.lawa
         echo -e "gem 'lawa', github: 'phrase/lawa'" >> Gemfile.lawa
+        echo "gem 'logger'" >> Gemfile.lawa
         bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
         BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
       env:
