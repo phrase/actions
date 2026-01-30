@@ -42,6 +42,8 @@ jobs:
         run: |
           bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
           bundle _${{ inputs.ruby-bundler-version }}_ add -g development lawa --github "phrase/lawa"
+          # license_finder needs logger on Ruby 4
+          bundle _${{ inputs.ruby-bundler-version }}_ add logger
           bundle _${{ inputs.ruby-bundler-version }}_ lock --add-platform x86_64-linux
         env:
           BUNDLE_GITHUB__COM: x-access-token:${{ secrets.github-token }}
