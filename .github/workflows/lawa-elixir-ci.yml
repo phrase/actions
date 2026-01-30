@@ -50,6 +50,8 @@ jobs:
           touch Gemfile.lawa
           echo "source 'https://rubygems.org'" >> Gemfile.lawa
           echo -e "gem 'lawa', :git => 'https://github.com/phrase/lawa.git'" >> Gemfile.lawa
+          # license_finder needs logger on Ruby 4
+          echo "gem 'logger'" >> Gemfile.lawa
           bundle _${{ inputs.ruby-bundler-version }}_ config unset deployment
           BUNDLE_GEMFILE=Gemfile.lawa bundle _${{ inputs.ruby-bundler-version }}_ install
         env:
