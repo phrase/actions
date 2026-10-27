@@ -4,7 +4,7 @@ inputs:
   ruby-version:
     description: 'The Ruby version to use'
     required: false
-    default: '4.0.9'
+    default: '3.3.8'
   ruby-bundler-version:
     description: 'The Ruby bundler version to use'
     required: false
