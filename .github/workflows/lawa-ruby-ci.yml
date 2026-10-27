@@ -6,7 +6,7 @@ on:
       ruby-version:
         required: false
         type: string
-        default: 3.3.0
+        default: 4.0.9
       ruby-bundler-version:
         required: false
         type: string
