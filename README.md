@@ -61,11 +61,11 @@ Example:
 
 ##### `ruby-version`
 
-**Optional** Ruby version for installing `lawa` gem, defaults to `3.0.3`.
+**Optional** Ruby version for installing `lawa` gem, defaults to `3.3`.
 
 ##### `ruby-bundler-version`
 
-**Optional** Ruby bundler version for installing `lawa` gem, defaults to `2.1.4`.
+**Optional** Ruby bundler version for installing `lawa` gem, defaults to `2.5.23`.
 
 ##### `decisions-file`
 

@@ -8,7 +8,7 @@ inputs:
   ruby-bundler-version:
     description: 'The Ruby bundler version to use'
     required: false
-    default: '2.1.4'
+    default: '2.5.23'
   working-directory:
     description: 'The working directory to run lawa in'
     required: false

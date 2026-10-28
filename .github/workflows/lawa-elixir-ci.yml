@@ -18,7 +18,7 @@ on:
       ruby-bundler-version:
         required: false
         type: string
-        default: 2.3.14
+        default: 2.5.23
       decisions-file:
         required: false
         type: string
